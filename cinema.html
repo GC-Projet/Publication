@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GC-Soft — Cinéma</title>
+<meta name="description" content="Mes films coups de cœur, avec quelques mots sur chacun et un lien vers sa bande-annonce.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f1ea;
+    --paper: #fffdf9;
+    --ink: #2a2420;
+    --ink-soft: #6b6058;
+    --line: #e4dbcf;
+    --bronze: #9c6a3c;
+    --bronze-deep: #7c5230;
+    --bronze-pale: #f1e4d4;
+    --ok: #4f7a52;
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1714;
+      --paper: #242019;
+      --ink: #efe7dc;
+      --ink-soft: #b3a698;
+      --line: #3a332b;
+      --bronze: #d29a63;
+      --bronze-deep: #e3b07d;
+      --bronze-pale: #3a2d20;
+      --ok: #8fbf8f;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  a { color: var(--bronze-deep); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+  /* En-tête */
+  header {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; }
+  .marque {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--serif); font-weight: 700; font-size: 21px;
+    color: var(--ink); text-decoration: none;
+  }
+  .monogramme {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--bronze); color: var(--paper);
+    display: grid; place-items: center;
+    font-family: var(--serif); font-size: 15px; font-weight: 700;
+  }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  nav a {
+    color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600;
+    padding: 6px 12px; border-radius: 6px;
+  }
+  nav a:hover { color: var(--bronze-deep); background: var(--bronze-pale); }
+  @media (max-width: 620px) { nav a.option { display: none; } }
+
+  /* Accueil */
+  .accueil { padding-top: 72px; padding-bottom: 56px; }
+  .surtitre {
+    font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--bronze);
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: clamp(32px, 5.2vw, 52px); line-height: 1.12;
+    margin: 14px 0 20px; max-width: 760px;
+  }
+  .accueil p { color: var(--ink-soft); font-size: 18px; max-width: 640px; margin: 0; }
+  .engagements { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 28px; padding: 0; list-style: none; }
+  .engagements li { font-size: 14.5px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .engagements li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--bronze); }
+
+  /* Sections */
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  .tete { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+  h2 { font-family: var(--serif); font-weight: 700; font-size: 32px; margin: 6px 0 0; }
+  .tete p { color: var(--ink-soft); margin: 0; max-width: 460px; font-size: 15px; }
+
+  /* Boutons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 22px; border-radius: 8px;
+    font-weight: 700; font-size: 15px; text-decoration: none;
+    border: 1.5px solid var(--bronze);
+  }
+  .btn.plein { background: var(--bronze); color: var(--paper); }
+  .btn.plein:hover { background: var(--bronze-deep); border-color: var(--bronze-deep); }
+  .btn.trait { background: transparent; color: var(--bronze-deep); }
+  .btn.trait:hover { background: var(--bronze-pale); }
+
+  /* ConsoTrack */
+  .vedette {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    display: grid; grid-template-columns: 1.6fr 1fr; overflow: hidden;
+  }
+  @media (max-width: 860px) { .vedette { grid-template-columns: 1fr; } }
+  .vedette .texte { padding: 36px 36px 32px; }
+  .etiquettes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .etiquette {
+    font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink-soft);
+  }
+  .etiquette.nouveau { background: var(--bronze); border-color: var(--bronze); color: var(--paper); }
+  h3 { font-family: var(--serif); font-weight: 700; font-size: 28px; margin: 0 0 6px; }
+  .accroche { font-size: 17px; color: var(--ink); margin: 0 0 22px; }
+  h4 {
+    font-size: 12.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--bronze); margin: 24px 0 8px;
+  }
+  .vedette ul { margin: 0; padding-left: 20px; }
+  .vedette li { margin: 4px 0; }
+  .jamais { list-style: none; padding-left: 0 !important; }
+  .jamais li { padding-left: 26px; position: relative; }
+  .jamais li::before {
+    content: "✓"; position: absolute; left: 0; top: 0;
+    color: var(--ok); font-weight: 700;
+  }
+  .fiche {
+    background: var(--bronze-pale); padding: 32px 28px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .fiche dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; font-size: 14.5px; }
+  .fiche dt { color: var(--ink-soft); }
+  .fiche dd { margin: 0; font-weight: 600; }
+  .fiche .actions { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+  .fiche small { color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+
+  /* Autres applications */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+  @media (max-width: 760px) { .duo { grid-template-columns: 1fr; } }
+  .appli {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px; display: flex; flex-direction: column;
+  }
+  .appli h3 { font-size: 24px; }
+  .appli p { margin: 0 0 20px; color: var(--ink-soft); }
+  .appli .pied { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .version { font-size: 13px; color: var(--ink-soft); font-weight: 600; }
+
+  /* Utilitaires */
+  .liste { border: 1px solid var(--line); border-radius: 14px; background: var(--paper); overflow: hidden; }
+  .ligne {
+    display: grid; grid-template-columns: 170px 1fr auto; gap: 18px; align-items: center;
+    padding: 18px 24px; border-top: 1px solid var(--line);
+  }
+  .ligne:first-child { border-top: 0; }
+  .ligne .nom { font-family: var(--serif); font-weight: 700; font-size: 18px; }
+  .ligne .nom span { display: block; font-family: var(--sans); font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .ligne p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .ligne a { font-weight: 700; font-size: 14.5px; text-decoration: none; white-space: nowrap; }
+  .ligne a:hover { text-decoration: underline; }
+  @media (max-width: 640px) {
+    .ligne { grid-template-columns: 1fr; gap: 6px; }
+  }
+
+  /* Installer */
+  .colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .colonnes { grid-template-columns: 1fr; } }
+  .encart { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 26px 28px; }
+  .encart h3 { font-size: 21px; margin-bottom: 10px; }
+  .encart ol { margin: 0; padding-left: 20px; }
+  .encart li { margin: 6px 0; }
+  .encart p { margin: 0 0 10px; color: var(--ink-soft); }
+
+  /* Pied */
+  footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
+  .pied-page { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  footer p { margin: 4px 0; color: var(--ink-soft); font-size: 14px; }
+  footer a { font-weight: 700; text-decoration: none; }
+
+  .films { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 900px) { .films { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .films { grid-template-columns: 1fr; } }
+  .film {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .bandeau {
+    min-height: 130px; padding: 18px 20px; display: flex; align-items: flex-end;
+    font-family: var(--serif); font-weight: 700; font-size: 23px; line-height: 1.15;
+    color: #fffdf9;
+  }
+  .t1 { background: linear-gradient(135deg, #7c5230, #b98a5a); }
+  .t2 { background: linear-gradient(135deg, #5b3a4a, #a7707f); }
+  .t3 { background: linear-gradient(135deg, #3d4a5c, #7f8fa6); }
+  .t4 { background: linear-gradient(135deg, #5c4a2e, #a68f5e); }
+  .t5 { background: linear-gradient(135deg, #4a3a5c, #8f7fa6); }
+  .t6 { background: linear-gradient(135deg, #3f5246, #7e9a86); }
+  .film .corps { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .film .meta { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+  .film p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .film .mot { color: var(--ink); font-style: italic; }
+  .film .liens { margin-top: auto; padding-top: 6px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .film .liens a { font-weight: 700; font-size: 14px; text-decoration: none; }
+  .film .liens a:hover { text-decoration: underline; }
+  .bandeau .original { display: block; font-family: var(--sans); font-size: 13px; font-weight: 600; opacity: .85; margin-top: 6px; }
+  .sous-titre { font-size: 26px; margin: 44px 0 20px; }
+  .avertissement { margin-top: 28px; color: var(--ink-soft); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="marque" href="index.html"><span class="monogramme">GC</span>GC-Soft</a>
+    <nav aria-label="Sommaire">
+      <a href="index.html">← Accueil</a>
+      <a href="logiciels.html">Logiciels</a>
+      <a href="#contact" class="option">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap accueil">
+    <div class="surtitre">Cinéma</div>
+    <h1>Mes coups de cœur</h1>
+    <p>Quelques films qui m'ont marqué, et que j'aime faire découvrir. Pour chacun, un court résumé, sa bande-annonce et sa fiche.</p>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="films">
+      <article class="film">
+        <div class="bandeau t1"><div>À couteaux tirés<span class="original">Knives Out</span></div></div>
+        <div class="corps">
+          <span class="meta">2019 · Rian Johnson · Comédie policière</span>
+          <p>Au lendemain de ses 85 ans, un célèbre auteur de romans policiers est retrouvé mort dans son manoir. Un détective excentrique mène l'enquête au milieu d'une famille où chacun a quelque chose à cacher.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/546554-knives-out/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/546554-knives-out?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t2"><div>Bons baisers de Bruges<span class="original">In Bruges</span></div></div>
+        <div class="corps">
+          <span class="meta">2008 · Martin McDonagh · Comédie noire</span>
+          <p>Après une mission qui a mal tourné, deux tueurs à gages sont envoyés se faire oublier à Bruges, en attendant les ordres de leur patron. L'un découvre la ville avec bonheur, l'autre s'y ennuie ferme.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/8321-in-bruges/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/8321-in-bruges?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t3"><div>Burn After Reading</div></div>
+        <div class="corps">
+          <span class="meta">2008 · Joel et Ethan Coen · Comédie d'espionnage</span>
+          <p>Deux employés d'une salle de sport mettent la main sur un CD contenant les mémoires d'un ancien agent de la CIA, et se persuadent d'avoir trouvé des secrets d'État. Commence alors une cascade de malentendus.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/4944-burn-after-reading/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/4944-burn-after-reading?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t4"><div>Fargo</div></div>
+        <div class="corps">
+          <span class="meta">1996 · Joel et Ethan Coen · Thriller, comédie noire</span>
+          <p>Dans le Minnesota enneigé, un vendeur de voitures criblé de dettes fait enlever sa propre femme pour toucher la rançon. Le plan dérape, et une policière enceinte, calme et obstinée, remonte la piste.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/275-fargo/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/275-fargo?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t5"><div>Idiocracy</div></div>
+        <div class="corps">
+          <span class="meta">2006 · Mike Judge · Comédie satirique</span>
+          <p>Un militaire tout ce qu'il y a de plus ordinaire participe à une expérience d'hibernation et se réveille cinq siècles plus tard, dans une société devenue si bête qu'il y est l'homme le plus intelligent.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/7512-idiocracy/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/7512-idiocracy?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t6"><div>La Légende du pianiste sur l'océan<span class="original">La leggenda del pianista sull'oceano</span></div></div>
+        <div class="corps">
+          <span class="meta">1998 · Giuseppe Tornatore · Drame</span>
+          <p>Abandonné bébé à bord d'un paquebot au début du XXe siècle, un enfant devient un pianiste prodige qui n'a jamais mis le pied à terre. Son histoire est racontée par un ami trompettiste, sur une musique d'Ennio Morricone.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/10376-la-leggenda-del-pianista-sull-oceano/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/10376-la-leggenda-del-pianista-sull-oceano?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t1"><div>Le Parfum&nbsp;: histoire d'un meurtrier<span class="original">Perfume: The Story of a Murderer</span></div></div>
+        <div class="corps">
+          <span class="meta">2006 · Tom Tykwer · Drame, thriller</span>
+          <p>Dans la France du XVIIIe siècle, un orphelin doué d'un odorat hors du commun devient apprenti parfumeur, obsédé par l'idée de capturer l'odeur parfaite. D'après le roman de Patrick Süskind.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/1427-perfume-the-story-of-a-murderer/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/1427-perfume-the-story-of-a-murderer?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t2"><div>Les Aventures extraordinaires d'Adèle Blanc-Sec</div></div>
+        <div class="corps">
+          <span class="meta">2010 · Luc Besson · Aventure fantastique</span>
+          <p>Paris, 1912&nbsp;: une romancière intrépide est prête à tout pour sauver sa sœur, quitte à affronter momies égyptiennes et ptérodactyle. D'après la bande dessinée de Jacques Tardi.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/35552-les-aventures-extraordinaires-d-adele-blanc-sec/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/35552-les-aventures-extraordinaires-d-adele-blanc-sec?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t3"><div>Sisu</div></div>
+        <div class="corps">
+          <span class="meta">2022 · Jalmari Helander · Action, guerre</span>
+          <p>Laponie, 1944&nbsp;: un ancien soldat devenu chercheur d'or solitaire croise la route d'une unité allemande en retraite. Un film d'action presque sans dialogues, sec et sans répit.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/840326-sisu/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/840326-sisu?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t4"><div>The Imitation Game</div></div>
+        <div class="corps">
+          <span class="meta">2014 · Morten Tyldum · Drame historique</span>
+          <p>Pendant la Seconde Guerre mondiale, le mathématicien Alan Turing et une équipe de spécialistes britanniques tentent de percer Enigma, le code des communications de l'armée allemande.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/movie/205596-the-imitation-game/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/movie/205596-the-imitation-game?language=fr-FR" target="_blank" rel="noopener">Fiche du film →</a></div>
+        </div>
+      </article>
+      </div>
+
+      <h2 class="sous-titre">Séries</h2>
+      <div class="films">
+      <article class="film">
+        <div class="bandeau t4"><div>And Then There Were None</div></div>
+        <div class="corps">
+          <span class="meta">2015 · Craig Viveiros · Policier · mini-série BBC en 3 épisodes</span>
+          <p>Dix inconnus sont invités sur une île isolée par un hôte mystérieux qui ne se montre pas. Peu à peu, ils comprennent qu'aucun d'eux n'est là par hasard. D'après le roman d'Agatha Christie, aujourd'hui titré «&nbsp;Ils étaient dix&nbsp;» en français.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/tv/64684-and-then-there-were-none/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/tv/64684-and-then-there-were-none?language=fr-FR" target="_blank" rel="noopener">Fiche de la série →</a></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="bandeau t2"><div>Beau Séjour<span class="original">Hotel Beau Séjour</span></div></div>
+        <div class="corps">
+          <span class="meta">2017 · Nathalie Basteyns et Kaat Beels · Policier, fantastique · série belge, 2&nbsp;saisons</span>
+          <p>Dans un hôtel du Limbourg, une adolescente se réveille et découvre son propre corps sans vie. Devenue invisible pour presque tout le monde, elle mène l'enquête sur sa propre mort, dans un village où chacun semble avoir quelque chose à cacher.</p>
+          <div class="liens"><a href="https://www.themoviedb.org/tv/69190-beau-s-jour/videos?language=fr-FR" target="_blank" rel="noopener">Bande-annonce →</a><a href="https://www.themoviedb.org/tv/69190-beau-s-jour?language=fr-FR" target="_blank" rel="noopener">Fiche de la série →</a></div>
+        </div>
+      </article>
+      </div>
+      <p class="avertissement">Résumés écrits pour cette page, sans dévoiler la fin. Fiches et bandes-annonces&nbsp;: <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">The Movie Database (TMDB)</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap pied-page">
+    <div>
+      <a class="marque" href="index.html"><span class="monogramme">GC</span>GC-Soft</a>
+      <p>Logiciels utiles et films coups de cœur.</p>
+    </div>
+    <div>
+      <p>Une question, un souci&nbsp;? <a href="mailto:gc-soft@orange.fr">gc-soft@orange.fr</a></p>
+      <p>Envie de soutenir&nbsp;? <a href="https://ko-fi.com/gcsoft" target="_blank" rel="noopener">Faire un don sur Ko-fi</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
